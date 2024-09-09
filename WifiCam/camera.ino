@@ -1,3 +1,11 @@
+//
+// Camera config
+//
+//zf240909.2257
+//
+// Sources:
+// https://github.com/wjsanek/wjsanek
+
 void camera_init(){
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;

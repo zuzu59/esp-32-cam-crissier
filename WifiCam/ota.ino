@@ -1,7 +1,15 @@
+//
+// OTA avec l'Arduino IDE
+//
+//zf240909.2257
+//
+// Sources:
+// https://github.com/wjsanek/wjsanek
+
 void ota_setup(){
 
   // Port defaults to 3232
-  ArduinoOTA.setPort(3232);
+  // ArduinoOTA.setPort(xxx);
 
   // Hostname defaults to esp3232-[MAC]
   ArduinoOTA.setHostname(HOSTNAME);

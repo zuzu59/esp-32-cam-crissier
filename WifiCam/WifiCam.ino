@@ -1,10 +1,10 @@
 // Petite caméra de surveillance de St-Luc à base de mini caméra ESP32-cam
 //
-// ATTENTION, ce code a été testé sur un ESP32-cam. Pas testé sur les autres boards !
+// ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240909.2225"
-#define zHOST           "esp-cam-st-luc"        // ATTENTION, tout en minuscule
+#define zVERSION        "zf240909.2259"
+#define zHOST           "esp-cam-crissier"        // ATTENTION, tout en minuscule
 #define zDSLEEP         0                       // 0 ou 1 !
 // #define TIME_TO_SLEEP   120                     // dSleep en secondes 
 
@@ -17,10 +17,13 @@ Astuce:
 Installation:
 
 Pour les esp32-cam, il faut:
- * choisir comme board Ai Thinker ESP32-CAM
- * mettre le schéma de la partition à Regular 4MB with SPIFFS
+Board: Ai Thinker ESP32-CAM
+Flash Frequency: 80MHz
+Flash Mode: QIO
+Partition Scheme: Minimal SPIFFS (1.9MB APP with OTA/190KB SPIFFS)
+Core Debug Level: None
 
-Comme cet esp32 ne possède pas de connecteur USB avec convertisseur TTL il faut en ajouter un externe pour le premier flash, après on peut s'en passer en flashant via OTA
+Comme cet ESP32-CAM ne possède pas de connecteur USB avec convertisseur TTL il faut en ajouter un externe pour le premier flash, après on peut s'en passer en flashant via OTA
 Et ponter le IO0 avec le GND pour se mettre en mode flashing !
 
 Pour le WiFiManager, il faut installer cette lib depuis le lib manager sur Arduino:
@@ -32,6 +35,7 @@ https://fr.aliexpress.com/item/1005001322358029.html
 https://randomnerdtutorials.com/esp32-cam-ai-thinker-pinout/
 https://github.com/SeeedDocument/forum_doc/blob/master/reg/ESP32_CAM_V1.6.pdf
 https://github.com/yoursunny/esp32cam/tree/main/examples/WifiCam
+https://github.com/wjsanek/wjsanek
 
 */
 
@@ -61,14 +65,28 @@ IPAddress secondaryDNS(8, 8, 4, 4); //optional
 
 // ESP32-cam
 #include "WifiCam.hpp"
-
-
-
-#include "esp_camera.h"
-
-
-esp32cam::Resolution initialResolution;
+// esp32cam::Resolution initialResolution;
 WebServer server(80);
+
+// Utilisé seulement pour la configuration de la ESP32-cam
+#include "esp_camera.h"
+// Camera pinout
+#define PWDN_GPIO_NUM     32
+#define RESET_GPIO_NUM    -1
+#define XCLK_GPIO_NUM      0
+#define SIOD_GPIO_NUM     26
+#define SIOC_GPIO_NUM     27
+#define Y9_GPIO_NUM       35
+#define Y8_GPIO_NUM       34
+#define Y7_GPIO_NUM       39
+#define Y6_GPIO_NUM       36
+#define Y5_GPIO_NUM       21
+#define Y4_GPIO_NUM       19
+#define Y3_GPIO_NUM       18
+#define Y2_GPIO_NUM        5
+#define VSYNC_GPIO_NUM    25
+#define HREF_GPIO_NUM     23
+#define PCLK_GPIO_NUM     22
 
 
 // Sonar Pulse
@@ -86,49 +104,7 @@ WebServer server(80);
 // OTA WEB server
 #include "otaWebServer.h"
 
-#define PWDN_GPIO_NUM    32
-// #define RESET_GPIO_NUM   -1
-
-
-void disableCamera() {
-  // Désactiver les broches de contrôle de la caméra
-  pinMode(PWDN_GPIO_NUM, OUTPUT);
-  digitalWrite(PWDN_GPIO_NUM, LOW);
-
-  // pinMode(RESET_GPIO_NUM, OUTPUT);
-  // digitalWrite(RESET_GPIO_NUM, LOW);
-
-  Serial.println("Camera disabled");
-}
-
-
-
-// Camera pinout
-#define PWDN_GPIO_NUM     32
-#define RESET_GPIO_NUM    -1
-#define XCLK_GPIO_NUM      0
-#define SIOD_GPIO_NUM     26
-#define SIOC_GPIO_NUM     27
-
-#define Y9_GPIO_NUM       35
-#define Y8_GPIO_NUM       34
-#define Y7_GPIO_NUM       39
-#define Y6_GPIO_NUM       36
-#define Y5_GPIO_NUM       21
-#define Y4_GPIO_NUM       19
-#define Y3_GPIO_NUM       18
-#define Y2_GPIO_NUM        5
-#define VSYNC_GPIO_NUM    25
-#define HREF_GPIO_NUM     23
-#define PCLK_GPIO_NUM     22
-
-
-
-
-
-
-void
-setup(){
+void setup(){
   // Pulse deux fois pour dire que l'on démarre
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW); delay(zSonarPulseOn); digitalWrite(ledPin, HIGH); delay(zSonarPulseOff);
@@ -148,7 +124,7 @@ setup(){
   // Start OTA Arduino IDE
   ota_setup();
 
-  // Start OTA server
+  // Start OTA WEB server
   otaWebServer();
 
   // go go go
@@ -186,11 +162,11 @@ setup(){
 
 
 void loop() {
-    // WEB server
+    // WEB camera server
     server.handleClient();
     // OTA Arduino IDE loop
     ArduinoOTA.handle();
-    // OTA loop
+    // OTA WEB loop
     serverOTA.handleClient();
     // Un petit coup de sonar pulse sur la LED pour dire que tout fonctionne bien
     sonarPulse();
