@@ -1,7 +1,12 @@
+//
+// WIFI
+//
+//zf240909.1913
+//
 void wifi_setup() {
   // Settings
   WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID,WIFI_PASSWORD);
+  WiFi.begin(zWIFI_SSID,zWIFI_PASSWORD);
   Serial.println(F("[WIFI] Connecting..."));
 }
 

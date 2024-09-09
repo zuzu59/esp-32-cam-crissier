@@ -1,7 +1,7 @@
-#define zVERSION        "zf240909.1715"
-#define zHOST           "esp-cam-st-luc"        // ATTENTION, tout en minuscule
+#define zVERSION        "zf240909.1923"
+#define zHOST           "esp-cam-crissier"        // ATTENTION, tout en minuscule
 #define zDSLEEP         0                       // 0 ou 1 !
-#define TIME_TO_SLEEP   120                     // dSleep en secondes 
+// #define TIME_TO_SLEEP   120                     // dSleep en secondes 
 
 
 
@@ -11,6 +11,9 @@
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 
+
+// Secrets pour WIFI
+#include "secrets.h"
 
 // OTA WEB server
 #include "otaWebServer.h"
@@ -26,8 +29,8 @@
 
 // Getting WIFI_SSID and WIFI_PASSWORD from external credentials file
 //#include "jtektiot_credentials.h";
-const char* WIFI_SSID = "xxx";
-const char* WIFI_PASSWORD = "xxx";
+const char* zWIFI_SSID = WIFI_SSID3;
+const char* zWIFI_PASSWORD = WIFI_PASSWORD3;
 
 // Wifi settings
 #define HOSTNAME "camera"

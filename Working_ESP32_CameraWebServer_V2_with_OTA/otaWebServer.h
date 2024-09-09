@@ -1,7 +1,7 @@
 //
 // OTA WEB server
 //
-// zf240908.1623
+// zf240909.1926
 //
 // Sources:
 // https://lastminuteengineers.com/esp32-ota-web-updater-arduino-ide/
@@ -57,9 +57,9 @@ static void otaWebServer() {
 
     HTTPUpload& upload = serverOTA.upload();
 
-    Serial.print("upload.status: ");
-    Serial.println(upload.status);
-    delay(1000);
+    // Serial.print("upload.status: ");
+    // Serial.println(upload.status);
+    // delay(100);
 
     if (upload.status == UPLOAD_FILE_START) {
       Serial.printf("Update: %s\n", upload.filename.c_str());
