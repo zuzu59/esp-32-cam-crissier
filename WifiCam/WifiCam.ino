@@ -3,7 +3,7 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240909.2259"
+#define zVERSION        "zf240909.2323"
 #define zHOST           "esp-cam-crissier"        // ATTENTION, tout en minuscule
 #define zDSLEEP         0                       // 0 ou 1 !
 // #define TIME_TO_SLEEP   120                     // dSleep en secondes 
@@ -131,38 +131,17 @@ void setup(){
   Serial.println("\nC'est parti !\n");
 
   // Configuration de la caméra
-  // using namespace esp32cam;
-  // initialResolution = Resolution::find(1024, 768);
-  // Config cfg;
-  // cfg.setPins(pins::AiThinker);
-  // cfg.setResolution(initialResolution);
-  // cfg.setJpeg(80);
-  // bool ok = Camera.begin(cfg);
-  // if (!ok) {
-  //   Serial.println("camera initialize failure");
-  //   delay(5000);
-  //   ESP.restart();
-  // }
-
-
+  Serial.println("camera init...");
   camera_init();
 
-
-  Serial.println("camera initialize success");
-  Serial.println("camera starting");
-  Serial.print("http://");
-  Serial.println(WiFi.localIP());
+  // Start de la caméra
   addRequestHandlers();
-
-  // disableCamera();
-
-
   server.begin();
 }
 
 
 void loop() {
-    // WEB camera server
+    // WEB camera server loop
     server.handleClient();
     // OTA Arduino IDE loop
     ArduinoOTA.handle();

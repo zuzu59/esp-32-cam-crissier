@@ -1,7 +1,7 @@
 //
 // Camera config
 //
-//zf240909.2257
+//zf240909.2316
 //
 // Sources:
 // https://github.com/wjsanek/wjsanek
@@ -44,7 +44,14 @@ void camera_init(){
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK) {
     Serial.printf("[CAMERA] init failed with error 0x%x", err);
-    return;
+    delay(5000);
+    ESP.restart();
+  }
+  else {  
+    Serial.println("camera initialize success");
+    Serial.println("camera starting");
+    Serial.print("http://");
+    Serial.println(WiFi.localIP());
   }
 
 //MORE CAMERA SETTINGS:

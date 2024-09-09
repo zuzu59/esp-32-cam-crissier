@@ -1,10 +1,19 @@
+//
+// Camera server
+//
+//zf240909.2323
+//
+// Sources:
+// https://github.com/yoursunny/esp32cam
+
+
 #include "WifiCam.hpp"
 #include <StreamString.h>
 #include <uri/UriBraces.h>
 
 static const char FRONTPAGE[] = R"EOT(
 <!doctype html>
-<title>esp32cam WifiCam example</title>
+<title>esp32-cam WifiCam</title>
 <style>
 table,th,td { border: solid 1px #000000; border-collapse: collapse; }
 th,td { padding: 0.4rem; }
@@ -12,7 +21,7 @@ a { text-decoration: none; }
 footer { margin-top: 1rem; }
 </style>
 <body>
-<h1>esp32cam WifiCam example</h1>
+<h1>esp32-cam WifiCam</h1>
 <table>
 <thead>
 <tr><th>BMP<th>JPG<th>MJPEG

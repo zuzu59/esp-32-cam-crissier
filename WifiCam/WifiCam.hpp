@@ -1,3 +1,12 @@
+//
+// Camera server
+//
+//zf240909.2321
+//
+// Sources:
+// https://github.com/yoursunny/esp32cam
+
+
 #ifndef WIFICAM_HPP
 #define WIFICAM_HPP
 
