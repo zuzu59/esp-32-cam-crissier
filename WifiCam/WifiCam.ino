@@ -3,11 +3,10 @@
 // ATTENTION, ce code a été testé sur un ESP32-cam. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240908.1601"
+#define zVERSION        "zf240909.2225"
 #define zHOST           "esp-cam-st-luc"        // ATTENTION, tout en minuscule
 #define zDSLEEP         0                       // 0 ou 1 !
-#define TIME_TO_SLEEP   120                     // dSleep en secondes 
-int zDelay1Interval =   5000;                   // Délais en mili secondes pour la boucle loop
+// #define TIME_TO_SLEEP   120                     // dSleep en secondes 
 
 /*
 Utilisation:
@@ -49,22 +48,6 @@ const int ledPin = 33;             // the number of the LED pin
 //const int buttonPin = 9;          // the number of the pushbutton pin
 
 
-// ESP32-cam
-//#include "WifiCam.hpp"
-
-
-// Sonar Pulse
-#include "zSonarpulse.h"
-
-
-// WIFI
-#include "zWifi.h"
-
-
-// OTA WEB server
-#include "otaWebServer.h"
-
-
 // Source: https://randomnerdtutorials.com/esp32-static-fixed-ip-address-arduino-ide/
 // Set your Static IP address
 IPAddress local_IP(192, 168, 1, 61);
@@ -76,9 +59,73 @@ IPAddress primaryDNS(8, 8, 8, 8);   //optional
 IPAddress secondaryDNS(8, 8, 4, 4); //optional
 
 
-// esp32cam::Resolution initialResolution;
+// ESP32-cam
+#include "WifiCam.hpp"
 
-//WebServer server(80);
+
+
+#include "esp_camera.h"
+
+
+esp32cam::Resolution initialResolution;
+WebServer server(80);
+
+
+// Sonar Pulse
+#include "zSonarpulse.h"
+
+
+// WIFI
+#include "zWifi.h"
+
+
+// OTA Arduino IDE
+#include <ArduinoOTA.h>
+#define HOSTNAME zHOST
+
+// OTA WEB server
+#include "otaWebServer.h"
+
+#define PWDN_GPIO_NUM    32
+// #define RESET_GPIO_NUM   -1
+
+
+void disableCamera() {
+  // Désactiver les broches de contrôle de la caméra
+  pinMode(PWDN_GPIO_NUM, OUTPUT);
+  digitalWrite(PWDN_GPIO_NUM, LOW);
+
+  // pinMode(RESET_GPIO_NUM, OUTPUT);
+  // digitalWrite(RESET_GPIO_NUM, LOW);
+
+  Serial.println("Camera disabled");
+}
+
+
+
+// Camera pinout
+#define PWDN_GPIO_NUM     32
+#define RESET_GPIO_NUM    -1
+#define XCLK_GPIO_NUM      0
+#define SIOD_GPIO_NUM     26
+#define SIOC_GPIO_NUM     27
+
+#define Y9_GPIO_NUM       35
+#define Y8_GPIO_NUM       34
+#define Y7_GPIO_NUM       39
+#define Y6_GPIO_NUM       36
+#define Y5_GPIO_NUM       21
+#define Y4_GPIO_NUM       19
+#define Y3_GPIO_NUM       18
+#define Y2_GPIO_NUM        5
+#define VSYNC_GPIO_NUM    25
+#define HREF_GPIO_NUM     23
+#define PCLK_GPIO_NUM     22
+
+
+
+
+
 
 void
 setup(){
@@ -98,53 +145,54 @@ setup(){
   zStartWifi();
   //sensorValue3 = WiFi.RSSI();
 
+  // Start OTA Arduino IDE
+  ota_setup();
+
   // Start OTA server
   otaWebServer();
 
   // go go go
   Serial.println("\nC'est parti !\n");
 
+  // Configuration de la caméra
   // using namespace esp32cam;
   // initialResolution = Resolution::find(1024, 768);
   // Config cfg;
   // cfg.setPins(pins::AiThinker);
   // cfg.setResolution(initialResolution);
   // cfg.setJpeg(80);
-
   // bool ok = Camera.begin(cfg);
   // if (!ok) {
   //   Serial.println("camera initialize failure");
   //   delay(5000);
   //   ESP.restart();
   // }
-  // Serial.println("camera initialize success");
-  // Serial.println("camera starting");
-  // Serial.print("http://");
-  // Serial.println(WiFi.localIP());
 
-  // addRequestHandlers();
-//  server.begin();
+
+  camera_init();
+
+
+  Serial.println("camera initialize success");
+  Serial.println("camera starting");
+  Serial.print("http://");
+  Serial.println(WiFi.localIP());
+  addRequestHandlers();
+
+  // disableCamera();
+
+
+  server.begin();
 }
-
-
 
 
 void loop() {
-    // Délais non bloquant pour le serveur WEB et OTA
-    zDelay1(zDelay1Interval);
-}
-
-
-    // Délais non bloquant pour le serveur WEB et OTA
-void zDelay1(long zDelayMili){
-  long zDelay1NextMillis = zDelayMili + millis(); 
-  while(millis() < zDelay1NextMillis ){
     // WEB server
-//    server.handleClient();
+    server.handleClient();
+    // OTA Arduino IDE loop
+    ArduinoOTA.handle();
     // OTA loop
     serverOTA.handleClient();
     // Un petit coup de sonar pulse sur la LED pour dire que tout fonctionne bien
     sonarPulse();
-    }
-
 }
+
