@@ -1,7 +1,7 @@
 //
 // WIFI
 //
-// zf240910.1148
+// zf240910.1432
 //
 // Sources:
 // https://randomnerdtutorials.com/esp32-useful-wi-fi-functions-arduino
@@ -21,7 +21,7 @@
 WiFiClient client;
 HTTPClient http;
 float rrsiLevel = 0;      // variable to store the RRSI level
-
+IPAddress zSubnet(255, 255, 255, 0);
 
 
 void zWifiTrouble(){
@@ -33,6 +33,31 @@ void zWifiTrouble(){
   esp_deep_sleep_start();
 #endif
   ESP.restart();
+}
+
+
+
+void zWifiBegin(const char* zWIFI_SSID, const char* zWIFI_PASSWORD){
+
+#ifdef zIpStatic
+  WiFi.config(zLocal_IP, zGateway, zSubnet);
+#endif
+
+  Serial.print("Connecting ");
+  WiFi.begin(zWIFI_SSID, zWIFI_PASSWORD);
+  WiFi.setTxPower(WIFI_POWER_8_5dBm);  // diminution de la puissance à cause de la réflexion de l'antenne sur le HTU21D directement soudé sur le esp32-c3 super mini zf240725.1800
+  int connAttempts = 0;
+  while (WiFi.status() != WL_CONNECTED && connAttempts < 60) {
+    delay(500);
+    Serial.print(".");
+    connAttempts++;
+  }
+  Serial.println("");
+  if (WiFi.status() == WL_CONNECTED) {
+  } else {
+    Serial.println("Failed to connect");
+    zWifiTrouble();
+  }
 }
 
 
@@ -62,6 +87,8 @@ void zWifiTrouble(){
     wifi_creds.push_back(creds7);
     WifiCredentials creds8 = {WIFI_SSID8, WIFI_PASSWORD8};
     wifi_creds.push_back(creds8);
+    WifiCredentials creds9 = {WIFI_SSID9, WIFI_PASSWORD9};
+    wifi_creds.push_back(creds9);
 
     int best_rssi = -1000;
     String best_ssid;
@@ -70,7 +97,7 @@ void zWifiTrouble(){
     WiFi.mode(WIFI_STA);
     WiFi.disconnect();
     delay(100);
-     Serial.println("On scanne les AP WIFI");
+     Serial.println("On scanne les AP WIFI...");
     int n = WiFi.scanNetworks();
     Serial.print("Number SSID scanned: ");
     Serial.println(n);
@@ -92,24 +119,25 @@ void zWifiTrouble(){
     }
     // Se connecter au réseau Wi-Fi avec le meilleur RSSI
     if (!best_ssid.isEmpty()) {
-      WiFi.begin(best_ssid.c_str(), best_password.c_str());
+      zWifiBegin(best_ssid.c_str(), best_password.c_str());
+      // WiFi.begin(best_ssid.c_str(), best_password.c_str());
 
-      WiFi.setTxPower(WIFI_POWER_8_5dBm);  // diminution de la puissance à cause de la réflexion de l'antenne sur le HTU21D directement soudé sur le esp32-c3 super mini zf240725.1800
+      // WiFi.setTxPower(WIFI_POWER_8_5dBm);  // diminution de la puissance à cause de la réflexion de l'antenne sur le HTU21D directement soudé sur le esp32-c3 super mini zf240725.1800
 
-      Serial.print("Connecting to ");
-      Serial.println(best_ssid);
-      int connAttempts = 0;
-      while (WiFi.status() != WL_CONNECTED && connAttempts < 60) {
-        delay(500);
-        Serial.print(".");
-        connAttempts++;
-      }
-      Serial.println("");
-      if (WiFi.status() == WL_CONNECTED) {
-      } else {
-        Serial.println("Failed to connect");
-        zWifiTrouble();
-      }
+      // Serial.print("Connecting to ");
+      // Serial.println(best_ssid);
+      // int connAttempts = 0;
+      // while (WiFi.status() != WL_CONNECTED && connAttempts < 60) {
+      //   delay(500);
+      //   Serial.print(".");
+      //   connAttempts++;
+      // }
+      // Serial.println("");
+      // if (WiFi.status() == WL_CONNECTED) {
+      // } else {
+      //   Serial.println("Failed to connect");
+      //   zWifiTrouble();
+      // }
     } else {
       Serial.println("No known networks found");
       zWifiTrouble();

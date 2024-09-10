@@ -3,9 +3,11 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240910.1208"
+#define zVERSION        "zf240910.1432"
 #define zHOST           "esp-cam-crissier-1"        // ATTENTION, tout en minuscule
-#define zDSLEEP         0                       // 0 ou 1 !
+#define zIpStatic
+IPAddress zLocal_IP(192, 168, 57, 61);
+IPAddress zGateway(192, 168, 57, 1);
 
 /*
 Utilisation:
@@ -49,17 +51,18 @@ https://github.com/wjsanek/wjsanek
 // General
 const int ledPin = 33;             // the number of the LED pin
 //const int buttonPin = 9;          // the number of the pushbutton pin
+#define zDSLEEP         0                       // 0 ou 1 !
 
 
-// Source: https://randomnerdtutorials.com/esp32-static-fixed-ip-address-arduino-ide/
-// Set your Static IP address
-IPAddress local_IP(192, 168, 1, 61);
-// Set your Gateway IP address
-IPAddress gateway(192, 168, 1, 1);
+// // Source: https://randomnerdtutorials.com/esp32-static-fixed-ip-address-arduino-ide/
+// // Set your Static IP address
+// IPAddress local_IP(192, 168, 1, 61);
+// // Set your Gateway IP address
+// IPAddress gateway(192, 168, 1, 1);
 
-IPAddress subnet(255, 255, 255, 0);
-IPAddress primaryDNS(8, 8, 8, 8);   //optional
-IPAddress secondaryDNS(8, 8, 4, 4); //optional
+// IPAddress subnet(255, 255, 255, 0);
+// IPAddress primaryDNS(8, 8, 8, 8);   //optional
+// IPAddress secondaryDNS(8, 8, 4, 4); //optional
 
 
 // ESP32-cam
