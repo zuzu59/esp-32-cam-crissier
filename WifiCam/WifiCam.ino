@@ -3,8 +3,8 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240910.1819"
-#define zHOST           "esp-cam-crissier1"        // ATTENTION, tout en minuscule
+#define zVERSION        "zf240910.2337"
+#define zHOST           "esp-cam-crissierx"        // ATTENTION, tout en minuscule
 // #define zIpStatic
 // IPAddress zLocal_IP(192, 168, 57, 61);
 // IPAddress zGateway(192, 168, 57, 1);

@@ -1,7 +1,7 @@
 //
 // Camera server
 //
-#define zWifiVersion   "zf240910.1838"
+#define zWifiVersion   "zf240910.2337"
 //
 // Sources:
 // https://github.com/yoursunny/esp32cam
@@ -99,6 +99,7 @@ void addRequestHandlers(){
 
   server.on("/status", HTTP_GET, [] { 
     String zString = "";
+    zString = zString + "Hostname: " + WiFi.getHostname() + "<br>" ;
     zString = zString + "zWifiVersion: " + zWifiVersion + "<br>" ;
     zString = zString + "SSID: " + WiFi.SSID() + "<br>" ;
     zString = zString + "RSSI: " + WiFi.RSSI() + "<br>" ;
