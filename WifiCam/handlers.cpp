@@ -1,7 +1,7 @@
 //
 // Camera server
 //
-//zf240910.1121
+//zf240910.1627
 //
 // Sources:
 // https://github.com/yoursunny/esp32cam
@@ -93,6 +93,18 @@ void addRequestHandlers(){
 
   server.on("/robots.txt", HTTP_GET,
             [] { server.send(200, "text/html", "User-Agent: *\nDisallow: /\n"); });
+
+  server.on("/zuzu", HTTP_GET,
+            [] { server.send(200, "text/html", "Hello zuzu\n"); });
+
+  server.on("/status", HTTP_GET, [] { 
+    String zString = "";
+    zString = zString + "SSID: " + WiFi.SSID() + "<br>" ;
+    zString = zString + "RSSI: " + WiFi.RSSI() + "<br>" ;
+    zString = zString + "TX power: " + WiFi.getTxPower() + "<br>" ;
+    zString = zString + "IP: " + WiFi.localIP().toString() + "<br>" ;
+    server.send(200, "text/html", zString); 
+  });
 
   server.on("/resolutions.csv", HTTP_GET, [] {
     StreamString b;

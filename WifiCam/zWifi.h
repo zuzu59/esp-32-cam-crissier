@@ -19,8 +19,8 @@
 #include <HTTPClient.h>
 #include "secrets.h"
 
-#define WIFI_SSID WIFI_SSID3
-#define WIFI_PASSWORD WIFI_PASSWORD3
+#define yWIFI_SSID WIFI_SSID3
+#define yWIFI_PASSWORD WIFI_PASSWORD3
 
 WiFiClient client;
 HTTPClient http;
@@ -32,10 +32,11 @@ void zWifiTrouble(){
   Serial.println("\nOn a un problème avec le WIFI !");
   delay(200);
   Serial.flush(); 
-#if zDSLEEP == 1
-  // On part en dsleep pour économiser la batterie !
-  esp_deep_sleep_start();
-#endif
+  WiFi.disconnect();
+  if (zDSLEEP == 1){
+    // On part en dsleep pour économiser la batterie !
+    esp_deep_sleep_start();
+  }
   ESP.restart();
 }
 
@@ -179,7 +180,7 @@ void zWifiBegin(const char* zWIFI_SSID, const char* zWIFI_PASSWORD){
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
 
-  zWifiBegin(WIFI_SSID, WIFI_PASSWORD);
+  zWifiBegin(yWIFI_SSID, yWIFI_PASSWORD);
 
 
 

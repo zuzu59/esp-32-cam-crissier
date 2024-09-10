@@ -3,7 +3,7 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240910.1521"
+#define zVERSION        "zf240910.1737"
 #define zHOST           "esp-cam-crissier-1"        // ATTENTION, tout en minuscule
 // #define zIpStatic
 // IPAddress zLocal_IP(192, 168, 57, 61);
@@ -39,7 +39,6 @@ https://github.com/yoursunny/esp32cam/tree/main/examples/WifiCam
 https://github.com/wjsanek/wjsanek
 
 */
-
 
 
 
