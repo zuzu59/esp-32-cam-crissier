@@ -1,7 +1,7 @@
 //
 // Camera server
 //
-//zf240910.1627
+#define zWifiVersion   "zf240910.1838"
 //
 // Sources:
 // https://github.com/yoursunny/esp32cam
@@ -99,11 +99,22 @@ void addRequestHandlers(){
 
   server.on("/status", HTTP_GET, [] { 
     String zString = "";
+    zString = zString + "zWifiVersion: " + zWifiVersion + "<br>" ;
     zString = zString + "SSID: " + WiFi.SSID() + "<br>" ;
     zString = zString + "RSSI: " + WiFi.RSSI() + "<br>" ;
     zString = zString + "TX power: " + WiFi.getTxPower() + "<br>" ;
     zString = zString + "IP: " + WiFi.localIP().toString() + "<br>" ;
+    zString = zString + "timestamp: " + String(millis()) + "<br>" ;
     server.send(200, "text/html", zString); 
+  });
+
+  server.on("/restart", HTTP_GET, [] { 
+    String zString = "On restart le binz !";
+    server.send(200, "text/html", zString); 
+    delay(3000);
+    WiFi.disconnect();
+    // ESP.restart();
+    esp_restart();
   });
 
   server.on("/resolutions.csv", HTTP_GET, [] {

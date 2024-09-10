@@ -3,8 +3,8 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240910.1737"
-#define zHOST           "esp-cam-crissier-1"        // ATTENTION, tout en minuscule
+#define zVERSION        "zf240910.1819"
+#define zHOST           "esp-cam-crissier1"        // ATTENTION, tout en minuscule
 // #define zIpStatic
 // IPAddress zLocal_IP(192, 168, 57, 61);
 // IPAddress zGateway(192, 168, 57, 1);
@@ -95,6 +95,7 @@ WebServer server(80);
 
 // WIFI
 #include "zWifi.h"
+// #define lowTxPower  true   // diminution de la puissance à cause de la réflexion de l'antenne sur le HTU21D directement soudé sur le esp32-c3 super mini zf240725.1800
 
 
 // OTA Arduino IDE

@@ -1,7 +1,7 @@
 //
 // WIFI
 //
-// zf240910.1521
+// zf240910.1836
 //
 // Sources:
 // https://randomnerdtutorials.com/esp32-useful-wi-fi-functions-arduino
@@ -12,6 +12,21 @@
 // #define zWifiNormal true
 #define zWifiAuto true
 // #define zWifiManager true        // plus testé !  zf240910.1512
+
+
+
+// Available ESP32 RF power parameters: 
+// 19.5dBm WIFI_POWER_19dBm (19.5dBm output, highest supply current ~150mA)
+// 19dBm WIFI_POWER_18_5dBm 
+// 18.5dBm WIFI_POWER_17dBm 
+// 17dBm WIFI_POWER_15dBm 
+// 15dBm WIFI_POWER_13dBm 
+// 13dBm WIFI_POWER_11dBm 
+// 11dBm WIFI_POWER_8_5dBm 
+// 8dBm WIFI_POWER_7dBm 
+// 7dBm WIFI_POWER_5dBm 
+// 5dBm WIFI_POWER_2dBm 
+// 2dBm WIFI_POWER_MINUS_1dBm (-1dBm (For -1dBm output, lowest supply current ~120mA)
 
 
 // WIFI
@@ -37,19 +52,26 @@ void zWifiTrouble(){
     // On part en dsleep pour économiser la batterie !
     esp_deep_sleep_start();
   }
-  ESP.restart();
+  // ESP.restart();
+  esp_restart();
+
 }
 
 
 void zWifiBegin(const char* zWIFI_SSID, const char* zWIFI_PASSWORD){
 #ifdef zIpStatic
   WiFi.config(zLocal_IP, zGateway, zSubnet);
+#else
+  WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
 #endif
+  WiFi.setHostname(zHOST);
   WiFi.persistent(false);           // pour ne pas user l'EEPROM !
   Serial.print("Connecting on ");
   Serial.print(zWIFI_SSID);
   WiFi.begin(zWIFI_SSID, zWIFI_PASSWORD);
+#ifdef lowTxPower
   WiFi.setTxPower(WIFI_POWER_8_5dBm);  // diminution de la puissance à cause de la réflexion de l'antenne sur le HTU21D directement soudé sur le esp32-c3 super mini zf240725.1800
+#endif  
   int connAttempts = 0;
   while (WiFi.status() != WL_CONNECTED && connAttempts < 60) {
     delay(500);
@@ -161,7 +183,9 @@ void zWifiBegin(const char* zWIFI_SSID, const char* zWIFI_PASSWORD){
     if ( digitalRead(buttonPin) == LOW) {
       WiFiManager wm; wm.resetSettings();
       Serial.println("Config WIFI effacée !"); delay(1000);
-      ESP.restart();
+      // ESP.restart();
+      esp_restart();
+
     }
     WiFiManager wm;
     bool res;
