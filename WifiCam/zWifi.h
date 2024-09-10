@@ -1,7 +1,7 @@
 //
 // WIFI
 //
-// zf240910.1442
+// zf240910.1521
 //
 // Sources:
 // https://randomnerdtutorials.com/esp32-useful-wi-fi-functions-arduino
@@ -9,9 +9,9 @@
 
 
 // Choix de la connexion WIFI, qu'une seule possibilité !
-#define zWifiNormal true
-// #define zWifiManager true
-// #define zWifiAuto true
+// #define zWifiNormal true
+#define zWifiAuto true
+// #define zWifiManager true        // plus testé !  zf240910.1512
 
 
 // WIFI
@@ -40,12 +40,13 @@ void zWifiTrouble(){
 }
 
 
-
 void zWifiBegin(const char* zWIFI_SSID, const char* zWIFI_PASSWORD){
 #ifdef zIpStatic
   WiFi.config(zLocal_IP, zGateway, zSubnet);
 #endif
-  Serial.print("Connecting ");
+  WiFi.persistent(false);           // pour ne pas user l'EEPROM !
+  Serial.print("Connecting on ");
+  Serial.print(zWIFI_SSID);
   WiFi.begin(zWIFI_SSID, zWIFI_PASSWORD);
   WiFi.setTxPower(WIFI_POWER_8_5dBm);  // diminution de la puissance à cause de la réflexion de l'antenne sur le HTU21D directement soudé sur le esp32-c3 super mini zf240725.1800
   int connAttempts = 0;
@@ -176,6 +177,7 @@ void zWifiBegin(const char* zWIFI_SSID, const char* zWIFI_PASSWORD){
   Serial.println("Connexion en WIFI Normal avec secrets.h");
   Serial.printf("WIFI_SSID: %s\nWIFI_PASSWORD: %s\n", WIFI_SSID, WIFI_PASSWORD);
   WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
 
   zWifiBegin(WIFI_SSID, WIFI_PASSWORD);
 
@@ -219,3 +221,16 @@ void zStartWifi(){
   Serial.println(WiFi.localIP());
   digitalWrite(ledPin, LOW);
 }
+
+
+
+// Check for WIFI
+void zWifi_Check_Connection(){
+  if(WiFi.status() != WL_CONNECTED){
+    // Wifi disconnected
+    Serial.println("WIFI Disconnected !");
+    ESP.restart();
+  }
+}
+
+

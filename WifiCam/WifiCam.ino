@@ -3,11 +3,11 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240910.1444"
+#define zVERSION        "zf240910.1521"
 #define zHOST           "esp-cam-crissier-1"        // ATTENTION, tout en minuscule
-#define zIpStatic
-IPAddress zLocal_IP(192, 168, 57, 61);
-IPAddress zGateway(192, 168, 57, 1);
+// #define zIpStatic
+// IPAddress zLocal_IP(192, 168, 57, 61);
+// IPAddress zGateway(192, 168, 57, 1);
 
 /*
 Utilisation:
@@ -148,6 +148,8 @@ void loop() {
     ArduinoOTA.handle();
     // OTA WEB loop
     serverOTA.handleClient();
+    // Check for WIFI
+    zWifi_Check_Connection();
     // Un petit coup de sonar pulse sur la LED pour dire que tout fonctionne bien
     sonarPulse();
 }
