@@ -1,7 +1,7 @@
 //
 // Camera server
 //
-//zf240909.2321
+//zf240910.1150
 //
 // Sources:
 // https://github.com/yoursunny/esp32cam
@@ -11,14 +11,11 @@
 #define WIFICAM_HPP
 
 #include <esp32cam.h>
-
 #include <WebServer.h>
 
 extern esp32cam::Resolution initialResolution;
-
 extern WebServer server;
 
-void
-addRequestHandlers();
+void addRequestHandlers();
 
 #endif // WIFICAM_HPP

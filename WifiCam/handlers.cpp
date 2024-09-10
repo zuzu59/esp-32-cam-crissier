@@ -1,7 +1,7 @@
 //
 // Camera server
 //
-//zf240909.2323
+//zf240910.1121
 //
 // Sources:
 // https://github.com/yoursunny/esp32cam
@@ -49,9 +49,7 @@ try {
 </script>
 )EOT";
 
-static void
-serveStill(bool wantBmp)
-{
+static void serveStill(bool wantBmp){
   auto frame = esp32cam::capture();
   if (frame == nullptr) {
     Serial.println("capture() failure");
@@ -77,9 +75,7 @@ serveStill(bool wantBmp)
   frame->writeTo(client);
 }
 
-static void
-serveMjpeg()
-{
+static void serveMjpeg(){
   Serial.println("MJPEG streaming begin");
   WiFiClient client = server.client();
   auto startTime = millis();
@@ -88,9 +84,7 @@ serveMjpeg()
   Serial.printf("MJPEG streaming end: %dfrm %0.2ffps\n", nFrames, 1000.0 * nFrames / duration);
 }
 
-void
-addRequestHandlers()
-{
+void addRequestHandlers(){
   server.on("/", HTTP_GET, [] {
     server.setContentLength(sizeof(FRONTPAGE));
     server.send(200, "text/html");

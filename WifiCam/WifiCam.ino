@@ -3,10 +3,9 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240909.2323"
-#define zHOST           "esp-cam-crissier"        // ATTENTION, tout en minuscule
+#define zVERSION        "zf240910.1208"
+#define zHOST           "esp-cam-crissier-1"        // ATTENTION, tout en minuscule
 #define zDSLEEP         0                       // 0 ou 1 !
-// #define TIME_TO_SLEEP   120                     // dSleep en secondes 
 
 /*
 Utilisation:
@@ -65,7 +64,6 @@ IPAddress secondaryDNS(8, 8, 4, 4); //optional
 
 // ESP32-cam
 #include "WifiCam.hpp"
-// esp32cam::Resolution initialResolution;
 WebServer server(80);
 
 // Utilisé seulement pour la configuration de la ESP32-cam

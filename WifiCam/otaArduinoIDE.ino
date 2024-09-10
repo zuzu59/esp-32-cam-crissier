@@ -1,7 +1,7 @@
 //
 // OTA avec l'Arduino IDE
 //
-//zf240909.2257
+//zf240910.1208
 //
 // Sources:
 // https://github.com/wjsanek/wjsanek
@@ -15,7 +15,7 @@ void ota_setup(){
   ArduinoOTA.setHostname(HOSTNAME);
 
   // No authentication by default
-  //ArduinoOTA.setPassword("");
+  ArduinoOTA.setPassword(ArduinoOtaPassword);
 
   // Password can be set with it's md5 value as well
   // MD5(admin) = 21232f297a57a5a743894a0e4a801fc3

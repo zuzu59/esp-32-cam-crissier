@@ -1,5 +1,8 @@
-// zf240908.1632
-
+//
+// WIFI
+//
+// zf240910.1148
+//
 // Sources:
 // https://randomnerdtutorials.com/esp32-useful-wi-fi-functions-arduino
 // https://dronebotworkshop.com/wifimanager/
