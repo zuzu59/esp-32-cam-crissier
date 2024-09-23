@@ -3,7 +3,7 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240923.0805"
+#define zVERSION        "zf240923.0912"
 // Il faut aussi modifier 'zWifiVersion' dans handlers.cpp !
 #define zHOST           "esp-cam-st-luc1"        // ATTENTION, tout en minuscule
 // #define zIpStatic
@@ -18,18 +18,21 @@ Astuce:
 
 Installation:
 
-Pour les esp32-cam, il faut:
-Board: Ai Thinker ESP32-CAM
-Flash Frequency: 80MHz
-Flash Mode: QIO
-Partition Scheme: Minimal SPIFFS (1.9MB APP with OTA/190KB SPIFFS)
-Core Debug Level: None
+  Pour les esp32-cam, il faut:
+  Board: Ai Thinker ESP32-CAM
+  Flash Frequency: 80MHz
+  Flash Mode: QIO
+  Partition Scheme: Minimal SPIFFS (1.9MB APP with OTA/190KB SPIFFS)
+  Core Debug Level: None
 
 Comme cet ESP32-CAM ne possède pas de connecteur USB avec convertisseur TTL il faut en ajouter un externe pour le premier flash, après on peut s'en passer en flashant via OTA
 Et ponter le IO0 avec le GND pour se mettre en mode flashing !
 
+ATTENTION à l'ordre de chargement des librairies !
+
 Pour le WiFiManager, il faut installer cette lib depuis le lib manager sur Arduino:
 https://github.com/tzapu/WiFiManager
+
 
 Sources:
 https://makeradvisor.com/esp32-cam-ov2640-camera/

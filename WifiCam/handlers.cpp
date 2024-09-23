@@ -1,11 +1,13 @@
 //
 // Camera server
 //
-#define zWifiVersion   "zf240923.0805"
+#define zWifiVersion   "zf240923.0908"
 //
 // Sources:
 // https://github.com/yoursunny/esp32cam
 
+
+#include <WiFi.h>
 
 #include "WifiCam.hpp"
 #include <StreamString.h>
