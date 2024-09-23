@@ -1,13 +1,12 @@
 //
 // OTA WEB server
 //
-// zf240910.1204
+// zf240923.0809
 //
 // Sources:
 // https://lastminuteengineers.com/esp32-ota-web-updater-arduino-ide/
 
 #include <WebServer.h>
-#include <ESPmDNS.h>
 #include <Update.h>
 
 
@@ -26,15 +25,6 @@
 WebServer serverOTA(8080);
 
 static void otaWebServer() {
-  /*use mdns for host name resolution*/
-  if (!MDNS.begin(zHOST)) {         //http://xxx.local
-    Serial.println("Error setting up MDNS responder!");
-    while (1) {
-      delay(1000);
-    }
-  }
-  Serial.println("mDNS responder started");
-
   /*return index page which is stored in serverIndex */
   serverOTA.on("/", HTTP_GET, []() {
     serverOTA.sendHeader("Connection", "close");

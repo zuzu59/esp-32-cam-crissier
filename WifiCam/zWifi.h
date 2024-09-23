@@ -1,7 +1,7 @@
 //
 // WIFI
 //
-// zf240922.2001
+// zf240923.0813
 //
 // Sources:
 // https://randomnerdtutorials.com/esp32-useful-wi-fi-functions-arduino
@@ -15,6 +15,8 @@
 
 
 
+// References:
+//
 // Available ESP32 RF power parameters: 
 // 19.5dBm WIFI_POWER_19dBm (19.5dBm output, highest supply current ~150mA)
 // 19dBm WIFI_POWER_18_5dBm 
@@ -32,14 +34,16 @@
 // WIFI
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <ESPmDNS.h>
 #include "secrets.h"
+
 
 #define yWIFI_SSID WIFI_SSID3
 #define yWIFI_PASSWORD WIFI_PASSWORD3
 
 WiFiClient client;
 HTTPClient http;
-const long zIntervalzWifi_Check_Connection =   60000;             // Interval en mili secondes pour le check de la connexion WIFI
+const long zIntervalzWifi_Check_Connection =   6000;             // Interval en mili secondes pour le check de la connexion WIFI
 unsigned long zPrevious_MilliszWifi_Check_Connection = 0;       // Compteur de temps pour le check de la connexion WIFI
 float rrsiLevel = 0;      // variable to store the RRSI level
 IPAddress zSubnet(255, 255, 255, 0);
@@ -224,6 +228,23 @@ void zWifiBegin(const char* zWIFI_SSID, const char* zWIFI_PASSWORD){
 #endif
 
 
+
+// start mDNS
+void zStartmDNS(){
+  /*use mdns for host name resolution*/
+  if (!MDNS.begin(zHOST)) {         //http://xxx.local
+    Serial.println("Error setting up MDNS responder!");
+    while (1) {
+      delay(1000);
+    }
+  }
+  Serial.println("mDNS responder started");
+}
+
+
+
+
+
 // start WIFI
 void zStartWifi(){
   digitalWrite(ledPin, HIGH);
@@ -247,7 +268,65 @@ void zStartWifi(){
   Serial.print("IP: ");
   Serial.println(WiFi.localIP());
   digitalWrite(ledPin, LOW);
+
+
+  zStartmDNS();
+
+
+
 }
+
+
+
+
+
+
+void browseService(const char *service, const char *proto) {
+  Serial.printf("Browsing for service _%s._%s.local. ... ", service, proto);
+  int n = MDNS.queryService(service, proto);
+  if (n == 0) {
+    Serial.println("no services found");
+  } else {
+    Serial.print(n);
+    Serial.println(" service(s) found");
+    for (int i = 0; i < n; ++i) {
+      // Print details for each service found
+      Serial.print("  ");
+      Serial.print(i + 1);
+      Serial.print(": ");
+      Serial.print(MDNS.hostname(i));
+      Serial.print(" (");
+      Serial.print(MDNS.address(i));
+      Serial.print(":");
+      Serial.print(MDNS.port(i));
+      Serial.println(")");
+    }
+  }
+  Serial.println();
+}
+
+void zScanServices() {
+  Serial.println("zScanServices !");
+  browseService("http", "tcp");
+  delay(1000);
+  browseService("arduino", "tcp");
+  delay(1000);
+  browseService("workstation", "tcp");
+  delay(1000);
+  browseService("smb", "tcp");
+  delay(1000);
+  browseService("afpovertcp", "tcp");
+  delay(1000);
+  browseService("ftp", "tcp");
+  delay(1000);
+  browseService("ipp", "tcp");
+  delay(1000);
+  browseService("printer", "tcp");
+  delay(10000);
+}
+
+
+
 
 
 // Check for WIFI
@@ -256,6 +335,9 @@ void zWifi_Check_Connection(){
   if(currentMillis - zPrevious_MilliszWifi_Check_Connection >= zIntervalzWifi_Check_Connection || zPrevious_MilliszWifi_Check_Connection > currentMillis){
     zPrevious_MilliszWifi_Check_Connection = currentMillis;
     Serial.println("zWifi_Check_Connection !");
+
+    zScanServices();
+
     if(WiFi.status() != WL_CONNECTED){
       // Wifi disconnected
       Serial.println("WIFI Disconnected !");
@@ -263,6 +345,7 @@ void zWifi_Check_Connection(){
     }
   }
 }
+
 
 
 
