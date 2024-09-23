@@ -3,7 +3,7 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240923.1051"
+#define zVERSION        "zf240923.1223"
 // Il faut aussi modifier 'zWifiVersion' dans handlers.cpp !
 #define zHOST           "esp-cam-st-luc1"        // ATTENTION, tout en minuscule
 // #define zIpStatic
@@ -55,6 +55,7 @@ https://github.com/wjsanek/wjsanek
 const int ledPin = 33;             // the number of the LED pin
 //const int buttonPin = 9;          // the number of the pushbutton pin
 #define zDSLEEP         0                       // 0 ou 1 !
+#include "secrets.h"
 
 
 // // Source: https://randomnerdtutorials.com/esp32-static-fixed-ip-address-arduino-ide/
@@ -97,6 +98,10 @@ WebServer server(80);
 #include "zSonarpulse.h"
 
 
+// MQTT
+#include "zMqtt.h"
+
+
 // WIFI
 #include "zWifi.h"
 // #define lowTxPower  true   // diminution de la puissance à cause de la réflexion de l'antenne sur le HTU21D directement soudé sur le esp32-c3 super mini zf240725.1800
@@ -106,8 +111,11 @@ WebServer server(80);
 #include <ArduinoOTA.h>
 #define HOSTNAME zHOST
 
+
 // OTA WEB server
 #include "otaWebServer.h"
+
+
 
 void setup(){
   // Pulse deux fois pour dire que l'on démarre
@@ -131,6 +139,10 @@ void setup(){
 
   // Start OTA WEB server
   otaWebServer();
+
+  // Connexion au MQTT
+  Serial.println("\n\nConnect MQTT !\n");
+  ConnectMQTT();
 
   // go go go
   Serial.println("\nC'est parti !\n");

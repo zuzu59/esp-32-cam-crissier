@@ -1,7 +1,7 @@
 //
 // Camera server
 //
-#define zWifiVersion   "zf240923.1051"
+#define zWifiVersion   "zf240923.1223"
 //
 // Sources:
 // https://github.com/yoursunny/esp32cam
