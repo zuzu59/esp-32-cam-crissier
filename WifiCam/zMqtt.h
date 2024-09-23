@@ -1,7 +1,7 @@
 //
 // MQTT
 //
-// zf240923.1334
+// zf240923.1344
 //
 // ATTENTION, c'est pour la famille ESP32, pas pour ESP32-C3 !
 //
@@ -17,11 +17,11 @@ float sensorValue5 = 0;  // variable to store the value coming from the sensor 5
 // MQTT
 #include <ArduinoHA.h>
 #define DEVICE_NAME      zHOST               // toujours en minuscules !
-#define SENSOR_NAME1     "sensor1"
-#define SENSOR_NAME2     "TX_Power"
-#define SENSOR_NAME3     "RSSI"
-#define SENSOR_NAME4     "WatchCount"
-#define SENSOR_NAME5     "sensor5"
+#define SENSOR_NAME1     "_Sensor1"
+#define SENSOR_NAME2     "_TX_Power"
+#define SENSOR_NAME3     "_RSSI"
+#define SENSOR_NAME4     "_WatchCount"
+#define SENSOR_NAME5     "_Sensor5"
 
 // #define PUBLISH_INTERVAL  2000 // how often image should be published to HA (milliseconds)
 
@@ -70,7 +70,7 @@ static void ConnectMQTT() {
 // Envoie les senseurs au mqtt
 void sendSensorMqtt(){
     mqtt.loop();
-    // Sensor1.setValue(sensorValue1);
+    Sensor1.setValue(sensorValue1);
     Sensor2.setValue(sensorValue2);
     Sensor3.setValue(sensorValue3);
     Sensor4.setValue(sensorValue4);

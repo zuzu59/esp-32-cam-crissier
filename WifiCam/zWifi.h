@@ -1,7 +1,7 @@
 //
 // WIFI
 //
-// zf240923.1334
+// zf240923.1352
 //
 // ATTENTION, c'est pour la famille ESP32, pas pour ESP32-C3 !
 //
@@ -34,7 +34,7 @@
 
 
 // Général
-const long zIntervalzWifi_Check_Connection =   10000;             // Interval en mili secondes pour le check de la connexion WIFI
+const long zIntervalzWifi_Check_Connection =   60000;             // Interval en mili secondes pour le check de la connexion WIFI
 unsigned long zPrevious_MilliszWifi_Check_Connection = 0;       // Compteur de temps pour le check de la connexion WIFI
 float rrsiLevel = 0;      // variable to store the RRSI level
 int watchCount = 0;
@@ -330,7 +330,7 @@ void zWifi_Check_Connection(){
   unsigned long currentMillis = millis();
   if(currentMillis - zPrevious_MilliszWifi_Check_Connection >= zIntervalzWifi_Check_Connection || zPrevious_MilliszWifi_Check_Connection > currentMillis){
     zPrevious_MilliszWifi_Check_Connection = currentMillis;
-    Serial.println("zWifi_Check_Connection !");
+    Serial.println("\nzWifi_Check_Connection !");
 
     // Vérifie si on est toujours connecté au WIFI ?
     if(WiFi.status() != WL_CONNECTED){

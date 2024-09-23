@@ -3,7 +3,7 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240923.1334"
+#define zVERSION        "zf240923.1406"
 // Il faut aussi modifier 'zWifiVersion' dans handlers.cpp !
 #define zHOST           "esp-cam-st-luc1"        // ATTENTION, tout en minuscule
 // #define zIpStatic
@@ -55,7 +55,7 @@ const int ledPin = 33;             // the number of the LED pin
 //const int buttonPin = 9;          // the number of the pushbutton pin
 #define zDSLEEP         0                       // 0 ou 1 !
 #include "secrets.h"
-const long zIntervalzSendTelemetrieMqtt =   5000;             // Interval en mili secondes pour l'envoi de la télémétrie au MQTT
+const long zIntervalzSendTelemetrieMqtt =   10000;             // Interval en mili secondes pour l'envoi de la télémétrie au MQTT
 unsigned long zPrevious_MilliszSendTelemetrieMqtt = 0;       // Compteur de temps pour l'envoi de la télémétrie au MQTT
 
 
@@ -146,6 +146,20 @@ void setup(){
 
   // go go go
   Serial.println("\nC'est parti !\n");
+
+  Serial.println("\nOn fait un power reset de la caméra !\n");
+
+  pinMode(PWDN_GPIO_NUM, OUTPUT);
+
+  // Power off the ESP32-CAM
+  digitalWrite(PWDN_GPIO_NUM, LOW);
+  delay(2000); // Wait for 2 seconds
+
+  // Power on the ESP32-CAM
+  digitalWrite(PWDN_GPIO_NUM, HIGH);
+  delay(2000); // Wait for 2 seconds
+
+
 
   // Configuration de la caméra
   Serial.println("camera init...");
