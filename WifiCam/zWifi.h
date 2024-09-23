@@ -1,7 +1,7 @@
 //
 // WIFI
 //
-// zf240923.0813
+// zf240923.1039
 //
 // Sources:
 // https://randomnerdtutorials.com/esp32-useful-wi-fi-functions-arduino
@@ -43,7 +43,7 @@
 
 WiFiClient client;
 HTTPClient http;
-const long zIntervalzWifi_Check_Connection =   6000;             // Interval en mili secondes pour le check de la connexion WIFI
+const long zIntervalzWifi_Check_Connection =   60000;             // Interval en mili secondes pour le check de la connexion WIFI
 unsigned long zPrevious_MilliszWifi_Check_Connection = 0;       // Compteur de temps pour le check de la connexion WIFI
 float rrsiLevel = 0;      // variable to store the RRSI level
 IPAddress zSubnet(255, 255, 255, 0);
@@ -336,7 +336,8 @@ void zWifi_Check_Connection(){
     zPrevious_MilliszWifi_Check_Connection = currentMillis;
     Serial.println("zWifi_Check_Connection !");
 
-    zScanServices();
+    // // Scanne les services mDNS
+    // zScanServices();
 
     if(WiFi.status() != WL_CONNECTED){
       // Wifi disconnected
