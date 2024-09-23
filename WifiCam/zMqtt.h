@@ -1,7 +1,7 @@
 //
 // MQTT
 //
-// zf240923.1224
+// zf240923.1334
 //
 // ATTENTION, c'est pour la famille ESP32, pas pour ESP32-C3 !
 //
@@ -17,11 +17,11 @@ float sensorValue5 = 0;  // variable to store the value coming from the sensor 5
 // MQTT
 #include <ArduinoHA.h>
 #define DEVICE_NAME      zHOST               // toujours en minuscules !
-// #define SENSOR_NAME1     "xxx"
+#define SENSOR_NAME1     "sensor1"
 #define SENSOR_NAME2     "TX_Power"
 #define SENSOR_NAME3     "RSSI"
 #define SENSOR_NAME4     "WatchCount"
-#define SENSOR_NAME5     "TimeStamp"
+#define SENSOR_NAME5     "sensor5"
 
 // #define PUBLISH_INTERVAL  2000 // how often image should be published to HA (milliseconds)
 
@@ -30,7 +30,7 @@ HAMqtt mqtt(client, device);
 unsigned long lastUpdateAt = 0;
 
 // c'est le ID du sensor, il doit être unique !
-// HASensorNumber Sensor1(DEVICE_NAME SENSOR_NAME1);   // , HASensorNumber::PrecisionP1);   // c'est le nom du sensor sur MQTT ! (PrecisionP1=x.1, PrecisionP2=x.01, ...)
+HASensorNumber Sensor1(DEVICE_NAME SENSOR_NAME1);   // , HASensorNumber::PrecisionP1);   // c'est le nom du sensor sur MQTT ! (PrecisionP1=x.1, PrecisionP2=x.01, ...)
 HASensorNumber Sensor2(DEVICE_NAME SENSOR_NAME2);   // , HASensorNumber::PrecisionP1);   // c'est le nom du sensor sur MQTT ! (PrecisionP1=x.1, PrecisionP2=x.01, ...)
 HASensorNumber Sensor3(DEVICE_NAME SENSOR_NAME3);   // c'est le nom du sensor sur MQTT !
 HASensorNumber Sensor4(DEVICE_NAME SENSOR_NAME4);   // c'est le nom du sensor sur MQTT !
@@ -43,9 +43,9 @@ static void ConnectMQTT() {
     device.setManufacturer("espressif");
     device.setModel("esp32-c3 super mini");
 
-    // Sensor1.setIcon("mdi:thermometer");
-    // Sensor1.setName(SENSOR_NAME1);           // c'est le nom du sensor sur Home Assistant !
-    // Sensor1.setUnitOfMeasurement("°C");
+    Sensor1.setIcon("mdi:numeric-off");
+    Sensor1.setName(SENSOR_NAME1);           // c'est le nom du sensor sur Home Assistant !
+    Sensor1.setUnitOfMeasurement("");
 
     Sensor2.setIcon("mdi:wifi-strength-1");
     Sensor2.setName(SENSOR_NAME2);           // c'est le nom du sensor sur Home Assistant !
@@ -59,9 +59,9 @@ static void ConnectMQTT() {
     Sensor4.setName(SENSOR_NAME4);           // c'est le nom du sensor sur Home Assistant !
     Sensor4.setUnitOfMeasurement("sum");
 
-    Sensor5.setIcon("mdi:counter");
+    Sensor5.setIcon("mdi:numeric-off");
     Sensor5.setName(SENSOR_NAME5);           // c'est le nom du sensor sur Home Assistant !
-    Sensor5.setUnitOfMeasurement("sum");
+    Sensor5.setUnitOfMeasurement("");
 
     mqtt.begin(BROKER_ADDR, BROKER_USERNAME, BROKER_PASSWORD);
     Serial.println("MQTT connected");

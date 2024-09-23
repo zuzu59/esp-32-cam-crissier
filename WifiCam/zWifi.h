@@ -1,7 +1,7 @@
 //
 // WIFI
 //
-// zf240923.1223
+// zf240923.1334
 //
 // ATTENTION, c'est pour la famille ESP32, pas pour ESP32-C3 !
 //
@@ -232,7 +232,6 @@ void zWifiBegin(const char* zWIFI_SSID, const char* zWIFI_PASSWORD){
 #endif
 
 
-
 // start mDNS
 void zStartmDNS(){
   /*use mdns for host name resolution*/
@@ -246,64 +245,7 @@ void zStartmDNS(){
 }
 
 
-
-
-void zWifiSendMqtt() {
-  // Envoie les mesures au MQTT
-  sendSensorMqtt();
-  Serial.print("TX_Power:");
-  Serial.println(sensorValue2);
-  Serial.print("RSSI:");
-  Serial.println(sensorValue3);
-  Serial.print("WatchCount:");
-  Serial.println(sensorValue4);
-  Serial.print("TimeStamp:");
-  Serial.println(sensorValue5);
-}
-
-
-
-
-
-
-// start WIFI
-void zStartWifi(){
-  digitalWrite(ledPin, HIGH);
-  #ifdef zWifiNormal
-    ConnectWiFi();
-  #endif
-  #ifdef zWifiManager
-    ConnectWiFi();
-  #endif
-  #ifdef zWifiAuto
-    connectToBestWifi();
-  #endif
-  Serial.println("\nConnecté au réseau WiFi !");
-  Serial.print("SSID: ");
-  Serial.println(WiFi.SSID());
-
-  int zRSSI = WiFi.RSSI();
-  Serial.print("RSSI: ");
-  Serial.println(zRSSI);
-  sensorValue3 = zRSSI;
-
-  int txPower = WiFi.getTxPower();
-  Serial.print("TX power: ");
-  Serial.println(txPower);  
-  sensorValue2 = zRSSI;
-
-  Serial.print("IP: ");
-  Serial.println(WiFi.localIP());
-  digitalWrite(ledPin, LOW);
-
-  zStartmDNS();
-}
-
-
-
-
-
-
+// Browse les services mDNS
 void browseService(const char *service, const char *proto) {
   Serial.printf("Browsing for service _%s._%s.local. ... ", service, proto);
   int n = MDNS.queryService(service, proto);
@@ -328,6 +270,8 @@ void browseService(const char *service, const char *proto) {
   Serial.println();
 }
 
+
+// Scanne les services mDNS
 void zScanServices() {
   Serial.println("zScanServices !");
   browseService("http", "tcp");
@@ -349,11 +293,36 @@ void zScanServices() {
 }
 
 
+// start WIFI
+void zStartWifi(){
+  digitalWrite(ledPin, HIGH);
+  #ifdef zWifiNormal
+    ConnectWiFi();
+  #endif
+  #ifdef zWifiManager
+    ConnectWiFi();
+  #endif
+  #ifdef zWifiAuto
+    connectToBestWifi();
+  #endif
+  Serial.println("\nConnecté au réseau WiFi !");
+  Serial.print("SSID: ");
+  Serial.println(WiFi.SSID());
 
+  int zRSSI = WiFi.RSSI();
+  Serial.print("RSSI: ");
+  Serial.println(zRSSI);
 
+  int txPower = WiFi.getTxPower();
+  Serial.print("TX power: ");
+  Serial.println(txPower);  
 
+  Serial.print("IP: ");
+  Serial.println(WiFi.localIP());
+  digitalWrite(ledPin, LOW);
 
-
+  zStartmDNS();
+}
 
 
 // Check for WIFI
@@ -363,27 +332,17 @@ void zWifi_Check_Connection(){
     zPrevious_MilliszWifi_Check_Connection = currentMillis;
     Serial.println("zWifi_Check_Connection !");
 
-    //Increment boot number and print it every reboot
-    ++watchCount;
-    sensorValue4 = watchCount;
-    Serial.println("watchCount: " + String(watchCount));
-
-
-    // Envoie la télémétrie au MQTT
-    zWifiSendMqtt();
-
-
-    // // Scanne les services mDNS
-    // zScanServices();
-
+    // Vérifie si on est toujours connecté au WIFI ?
     if(WiFi.status() != WL_CONNECTED){
       // Wifi disconnected
       Serial.println("WIFI Disconnected !");
       ESP.restart();
     }
+
+    zStartmDNS();
+
+    // // Scanne les services mDNS
+    // zScanServices();
   }
 }
-
-
-
 

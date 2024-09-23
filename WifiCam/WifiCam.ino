@@ -3,7 +3,7 @@
 // ATTENTION, ce code a été testé sur une Ai Thinker ESP32-CAM. Pas testé sur les autres boards !
 // Initial commit zf231111
 //
-#define zVERSION        "zf240923.1223"
+#define zVERSION        "zf240923.1334"
 // Il faut aussi modifier 'zWifiVersion' dans handlers.cpp !
 #define zHOST           "esp-cam-st-luc1"        // ATTENTION, tout en minuscule
 // #define zIpStatic
@@ -14,7 +14,6 @@
 Utilisation:
 
 Astuce:
-
 
 Installation:
 
@@ -56,6 +55,8 @@ const int ledPin = 33;             // the number of the LED pin
 //const int buttonPin = 9;          // the number of the pushbutton pin
 #define zDSLEEP         0                       // 0 ou 1 !
 #include "secrets.h"
+const long zIntervalzSendTelemetrieMqtt =   5000;             // Interval en mili secondes pour l'envoi de la télémétrie au MQTT
+unsigned long zPrevious_MilliszSendTelemetrieMqtt = 0;       // Compteur de temps pour l'envoi de la télémétrie au MQTT
 
 
 // // Source: https://randomnerdtutorials.com/esp32-static-fixed-ip-address-arduino-ide/
@@ -98,10 +99,6 @@ WebServer server(80);
 #include "zSonarpulse.h"
 
 
-// MQTT
-#include "zMqtt.h"
-
-
 // WIFI
 #include "zWifi.h"
 // #define lowTxPower  true   // diminution de la puissance à cause de la réflexion de l'antenne sur le HTU21D directement soudé sur le esp32-c3 super mini zf240725.1800
@@ -115,6 +112,9 @@ WebServer server(80);
 // OTA WEB server
 #include "otaWebServer.h"
 
+
+// MQTT
+#include "zMqtt.h"
 
 
 void setup(){
@@ -166,7 +166,36 @@ void loop() {
     serverOTA.handleClient();
     // Check for WIFI
     zWifi_Check_Connection();
+    // Send telemetrie to MQTT
+    zSendTelemetrieMqtt();
     // Un petit coup de sonar pulse sur la LED pour dire que tout fonctionne bien
     sonarPulse();
 }
+
+
+// Send telemetrie to MQTT
+void zSendTelemetrieMqtt(){
+  unsigned long currentMillis = millis();
+  if(currentMillis - zPrevious_MilliszSendTelemetrieMqtt >= zIntervalzSendTelemetrieMqtt || zPrevious_MilliszSendTelemetrieMqtt > currentMillis){
+    zPrevious_MilliszSendTelemetrieMqtt = currentMillis;
+    Serial.println("\nzSendTelemetrieMqtt !");
+
+    //Increment watchCount
+    ++watchCount;
+    sensorValue4 = watchCount;
+    Serial.println("watchCount: " + String(watchCount));
+
+    sensorValue2 = WiFi.getTxPower();
+    sensorValue3 = WiFi.RSSI();
+
+    sendSensorMqtt();
+    Serial.print("TX_Power:");
+    Serial.println(sensorValue2);
+    Serial.print("RSSI:");
+    Serial.println(sensorValue3);
+    Serial.print("WatchCount:");
+    Serial.println(sensorValue4);
+  }
+}
+
 
