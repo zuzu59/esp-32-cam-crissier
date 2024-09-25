@@ -5,7 +5,8 @@
 //
 #define zVERSION        "zf240923.1406"
 // Il faut aussi modifier 'zWifiVersion' dans handlers.cpp !
-#define zHOST           "esp-cam-st-luc1"        // ATTENTION, tout en minuscule
+//#define zHOST           "esp-cam-st-luc1"        // ATTENTION, tout en minuscule
+#define zHOST           "esp-cam-crissier1"        // ATTENTION, tout en minuscule
 // #define zIpStatic
 // IPAddress zLocal_IP(192, 168, 57, 61);
 // IPAddress zGateway(192, 168, 57, 1);

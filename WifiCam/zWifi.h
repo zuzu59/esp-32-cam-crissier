@@ -1,7 +1,7 @@
 //
 // WIFI
 //
-// zf240923.1352
+// zf240924.1639
 //
 // ATTENTION, c'est pour la famille ESP32, pas pour ESP32-C3 !
 //
@@ -125,6 +125,8 @@ void zWifiBegin(const char* zWIFI_SSID, const char* zWIFI_PASSWORD){
     wifi_creds.push_back(creds8);
     WifiCredentials creds9 = {WIFI_SSID9, WIFI_PASSWORD9};
     wifi_creds.push_back(creds9);
+    WifiCredentials creds10 = {WIFI_SSID10, WIFI_PASSWORD10};
+    wifi_creds.push_back(creds10);
 
     int best_rssi = -1000;
     String best_ssid;
